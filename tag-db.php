@@ -54,6 +54,23 @@ function addNewTagName($tag_text)
     }
 }
 
+function getTagInfoByID($tag_id)  
+{
+    global $db;
+
+    $query = "SELECT * FROM tag WHERE tag_id = :tag_id 
+    LEFT JOIN tag_map ON tag.tag_id = tag_map.tag_id";
+
+    $statement = $db->prepare($query);
+    $statement->bindValue(':tag_id', $tag_id);
+    $statement->execute();
+    $results = $statement->fetch();   // fetch()
+    $statement->closeCursor();
+   
+    return $results;
+
+}
+
 // get all tags for an entry
 function getAllTags($entry_id)
 {
@@ -112,5 +129,5 @@ function delete_tagMapping($tag_id) {
 }
 
 ?>
-?>
+
 
