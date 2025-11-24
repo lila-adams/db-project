@@ -27,7 +27,6 @@ function addRec($comic_name, $user_id)
     }
 }
 
-// get all tags for an entry
 function getAllRecommendations($user_id)
 {
     global $db;
@@ -57,7 +56,6 @@ function getRecByID($rec_id)
 }
 
 
-#deletes the entry AND all mentions of entry in tag
 function delete_rec($rec_id) {
     global $db;
 
@@ -70,7 +68,7 @@ function delete_rec($rec_id) {
     $statement->closeCursor();
 }
 
-//update entry info
+
 function updateRec($rec_id, $comic_name)
 {
     global $db;

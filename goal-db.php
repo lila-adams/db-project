@@ -1,5 +1,5 @@
 <?php
-# add recommendation
+# add goal
 function addGoal($user_id, $text)
 {
     global $db;
@@ -27,7 +27,7 @@ function addGoal($user_id, $text)
     }
 }
 
-// get all tags for an entry
+// get all goals
 function getAllGoals($user_id)
 {
     global $db;
@@ -57,7 +57,6 @@ function getGoalByID($goal_id)
 }
 
 
-#deletes the entry AND all mentions of entry in tag
 function delete_goal($goal_id) {
     global $db;
 
@@ -70,7 +69,6 @@ function delete_goal($goal_id) {
     $statement->closeCursor();
 }
 
-//update entry info
 function updateGoal($goal_id, $text)
 {
     global $db;

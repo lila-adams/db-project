@@ -101,7 +101,7 @@ function getAllTagMappings()
 }
 
 
-#deletes the entry AND all mentions of entry in tag
+
 function delete_tag($entry_id, $tag_id) {
     global $db;
 
