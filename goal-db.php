@@ -1,38 +1,38 @@
 <?php
 # add recommendation
-function addRec($comic_name, $user_id)
+function addGoal($user_id, $text)
 {
     global $db;
 
-    $query = "INSERT INTO Recommendation (comic_name, user_id) VALUES (:comic_name, :user_id)";  
+    $query = "INSERT INTO Goal (user_id, text) VALUES (:user_id, :text)";  
     
     try {
         $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
-        $statement->bindValue(':comic_name', $comic_name);
         $statement->bindValue(':user_id', $user_id);
+        $statement->bindValue(':text', $text);
         $statement->execute();      // run 
 
         $statement->closeCursor();
 
         if ($statement->rowCount() == 0)
-            echo "Failed to add recommendation. <br/>";
+            echo "Failed to add goal. <br/>";
     }
     catch (PDOException $e) 
     {
-        echo "Failed to add recommendation. Please ensure all fields are filled in.";
+        echo "Failed to add goal. Please ensure all fields are filled in.";
     }
     catch (Exception $e)
     {
-       echo "Failed to add recommendation. Please ensure all fields are filled in.";
+       echo "Failed to add goal. Please ensure all fields are filled in.";
     }
 }
 
 // get all tags for an entry
-function getAllRecommendations($user_id)
+function getAllGoals($user_id)
 {
     global $db;
 
-    $query = "SELECT * FROM Recommendations WHERE user_id = :user_id";
+    $query = "SELECT * FROM Goal WHERE user_id = :user_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':user_id', $user_id);
     $statement->execute();
@@ -42,13 +42,13 @@ function getAllRecommendations($user_id)
     return $results;
 }
 
-function getRecByID($rec_id)
+function getGoalByID($goal_id)
 {
     global $db;
 
-    $query = "SELECT * FROM Recommendation WHERE rec_id =:rec_id;";
+    $query = "SELECT * FROM Goal WHERE goal_id =:goal_id;";
     $statement = $db->prepare($query);
-    $statement->bindValue(':rec_id', $rec_id);
+    $statement->bindValue(':goal_id', $goal_id);
     $statement->execute();
     $results = $statement->fetch();   // fetch()
     $statement->closeCursor();
@@ -58,28 +58,28 @@ function getRecByID($rec_id)
 
 
 #deletes the entry AND all mentions of entry in tag
-function delete_rec($rec_id) {
+function delete_goal($goal_id) {
     global $db;
 
-    $query = "DELETE FROM tag WHERE rec_id=:rec_id";
+    $query = "DELETE FROM Goal WHERE goal_id=:goal_id";
 
     $statement = $db->prepare($query);
-    $statement->bindValue(':rec_id', $rec_id);
+    $statement->bindValue(':goal_id', $goal_id);
     $statement->execute();    
     
     $statement->closeCursor();
 }
 
 //update entry info
-function updateRec($rec_id, $comic_name)
+function updateGoal($goal_id, $text)
 {
     global $db;
     
-    $query = "UPDATE Recommendation SET comic_name=:comic_name WHERE rec_id=:rec_id";
+    $query = "UPDATE Goal SET text=:text WHERE goal_id=:goal_id";
     
     $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
-    $statement->bindValue(':comic_name', $comic_name);
-    $statement->bindValue(':rec_id', $rec_id);
+    $statement->bindValue(':goal_id', $goal_id);
+    $statement->bindValue(':text', $text);
     $statement->execute();      // run
 
     $statement->closeCursor();
@@ -88,4 +88,3 @@ function updateRec($rec_id, $comic_name)
 
 
 ?>
-
