@@ -130,7 +130,9 @@ function getEntryById($entry_id)
 {
     global $db;
 
-    $query = "SELECT * FROM Entry WHERE entry_id = :entry_id";
+    $query = "SELECT * FROM Entry WHERE entry_id = :entry_id 
+    LEFT JOIN tag ON tag.tag_id = Entry.tag_id
+    LEFT JOIN tag_map ON tag.tag_id = tag_map.tag_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();
@@ -160,14 +162,17 @@ function updateEntry($entry_id, $comic_name, $rating, $user_id, $curr_status, $r
 
 }
 
+#deletes the entry AND all mentions of entry in tag
 function deleteEntry($entry_id)
 {
     global $db;
 
-    $query = "DELETE FROM Entry WHERE entry_id=:entry_id";
+    $query = "DELETE FROM Entry WHERE entry_id=:entry_id;
+    DELETE FROM tag WHERE tag.entry_id =:entry_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();    
+    
     $statement->closeCursor();
 }
 
