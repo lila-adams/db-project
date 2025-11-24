@@ -110,6 +110,20 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
     return $results;
 }
 
+function getYearWritten($entry_id)
+{
+    global $db;
+    $query = "SELECT year FROM Entry
+    JOIN written_by.entry_id = Entry.entry_id
+    WHERE Entry.entry_id = :entry_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':entry_id', $entry_id);
+    $statement->execute();
+    $results = $statement->fetch();   // fetch()
+    $statement->closeCursor();
+   
+    return $results;
+}
 
 function findFavoriteEntries($user_id) {
     global $db;
