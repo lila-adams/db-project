@@ -3,11 +3,21 @@
 ////////////////////////////////////////////
 /** F25, PHP (on Google Standard App Engine) connect to MySQL instance (GCP) **/
 $username = 'root';                       // or your username
-$password = 'your-root-password';     
-$host = 'instance-connection-name';       // e.g., 'cs4750:us-east4:db-demo'; 
-$dbname = 'your-database-name';           // e.g., 'guestbook';
-$dsn = "mysql:unix_socket=/cloudsql/instance-connection-name;dbname=your-database-name";
-//     e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=guestbook";
+$password = 'Data123!';     
+$host = '136.107.47.230';       // e.g., 'cs4750:us-east4:db-demo';  //PUBLIC IP ADDRESS FOR GCP
+$dbname = 'comic-proj-db';           // e.g., 'guestbook';
+$dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
+//     e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=comic-proj-db";
+
+//to run locally, go to GoogleCloud instance database-project, Connections->Networking
+//add your IP address
+//go to VScode, download live server extension (not sure if that did anything tbh)
+// run php -S localhost:8000 -t public_html and you should see "test"
+// had to run this inside my vscoe terminal: sudo apt update; then sudo apt install php-mysql
+//
+//-Lila
+
+
 
 // to get instance connection name, go to GCP SQL overview page
 ////////////////////////////////////////////
