@@ -1,6 +1,6 @@
 <?php
 # add link btwn entry and tag
-function addTag($entry_id, $tag_id)
+function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
 {
     global $db;
 
@@ -32,7 +32,7 @@ function addNewTagName($tag_text)
 {
     global $db;
 
-    $query = "INSERT INTO tag_mapping (tag_text) VALUES (:tag_text)";  
+    $query = "INSERT INTO tag_map (tag_text) VALUES (:tag_text)";  
     
     try {
         $statement = $db->prepare($query);    // compile, leave fill-in-the-blank

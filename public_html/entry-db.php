@@ -1,5 +1,5 @@
 <?php
-function addEntry($comic_name, $rating, $user_id, $curr_status)
+function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
 {
     global $db;
 

@@ -2,8 +2,8 @@
 // Remember to start the database server (or GCP SQL instance) before trying to connect to it
 ////////////////////////////////////////////
 /** F25, PHP (on Google Standard App Engine) connect to MySQL instance (GCP) **/
-$username = 'root';                       // or your username
-$password = 'Data123!';     
+$username = 'comic_app';                       // or your username
+$password = 'ComicDBAUTH1505$';     
 $host = '136.107.47.230';       // e.g., 'cs4750:us-east4:db-demo';  //PUBLIC IP ADDRESS FOR GCP
 $dbname = 'comic-proj-db';           // e.g., 'guestbook';
 $dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
