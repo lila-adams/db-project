@@ -2,11 +2,21 @@
 // Remember to start the database server (or GCP SQL instance) before trying to connect to it
 ////////////////////////////////////////////
 /** F25, PHP (on Google Standard App Engine) connect to MySQL instance (GCP) **/
-$username = 'comic_app';                       // or your username
-$password = 'ComicDBAUTH1505$';     
-$host = '136.107.47.230';       // e.g., 'cs4750:us-east4:db-demo';  //PUBLIC IP ADDRESS FOR GCP
-$dbname = 'comic-proj-db';           // e.g., 'guestbook';
-$dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
+// $username = 'comic_app';                       // or your username
+// $password = 'ComicDBAUTH1505$';     
+// $host = '136.107.47.230';       // e.g., 'cs4750:us-east4:db-demo';  //PUBLIC IP ADDRESS FOR GCP
+// $dbname = 'comic-proj-db';           // e.g., 'guestbook';
+// $dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
+
+//LOCAL instructions
+$username = 'comic_app';                  //  Cloud SQL username
+$password = 'ComicDBAUTH1505';                    //  Cloud SQL password
+$host = '127.0.0.1';                 // LOCALHOST through Cloud SQL Proxy
+$port = 3306;                        // proxy port
+$dbname = 'comic-proj-db';           // your database name
+
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+
 //     e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=comic-proj-db";
 
 //to run locally, go to GoogleCloud instance database-project, Connections->Networking
