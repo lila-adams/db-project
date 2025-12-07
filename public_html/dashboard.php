@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action']) && $_POST['action'] == 'add') {
         $name = trim($_POST['comic_name']);
         $rating = $_POST['rating'];
+        if ($rating === '') $rating = null;
         $status = $_POST['status'];
         $review = $_POST['review'];
         
@@ -100,9 +101,9 @@ $entries = getAllEntries($user_id);
                         <div class="mb-3">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select">
-                                <option value="Reading">Reading</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Plan to Read">Plan to Read</option>
+                                <option value="new">New</option>
+                                <option value="in progress">In Progress</option>
+                                <option value="complete">Complete</option>
                             </select>
                         </div>
                         

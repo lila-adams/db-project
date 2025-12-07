@@ -8,7 +8,7 @@ function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
     try {
         $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
         $statement->bindValue(':comic_name', $comic_name);
-        $statement->bindValue(':rating', $rating);
+        $statement->bindValue(':rating', $rating, $rating === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
         $statement->bindValue(':user_id', $user_id);
         $statement->bindValue(':curr_status', $curr_status);
         $statement->bindValue(':review', $review);
@@ -26,7 +26,7 @@ function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
     }
     catch (Exception $e)
     {
-       echo "Failed to add entry. Please ensure all fields are filled in.";
+       echo "Failed to add entry. Please ensure all fields are correctly filled in.";
     }
 }
 

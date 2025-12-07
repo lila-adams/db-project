@@ -5,26 +5,37 @@ function addUser($username, $pwd)
 {
     global $db;
 
+    $check = "SELECT user_id FROM User WHERE username = :username";
+    $stmt = $db->prepare($check);
+    $stmt->bindValue(':username', $username);
+    $stmt->execute();
+    $existing = $stmt->fetch();
+    $stmt->closeCursor();
+
+    if ($existing) {
+        // username already exists
+        return false;
+    }
+
     $query = "INSERT INTO User (username, pwd) VALUES (:username, :pwd)";  
-    
+
     try {
-        $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
+        $statement = $db->prepare($query);
         $statement->bindValue(':username', $username);
         $statement->bindValue(':pwd', $pwd);
-        $statement->execute();      // run 
 
-        $statement->closeCursor();
-
-        if ($statement->rowCount() == 0)
-            echo "Failed to add user. <br/>";
+        if ($statement->execute()) {
+            $statement->closeCursor();
+            return true; 
+        } else {
+            return false; 
+        }
     }
-    catch (PDOException $e) 
-    {
-        echo "Failed to add user. Please ensure all fields are filled in.";
+    catch (PDOException $e) {
+        return false;
     }
-    catch (Exception $e)
-    {
-       echo "Failed to add user. Please ensure all fields are filled in.";
+    catch (Exception $e) {
+        return false;
     }
 }
 
