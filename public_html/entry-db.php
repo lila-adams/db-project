@@ -45,6 +45,17 @@ function getAllEntries($user_id)
     return $results;
 }
 
+function grantEntryAccess($user_id)
+{
+    global $db;
+
+    $query = "GRANT SELECT, INSERT, UPDATE, DELETE ON Entry TO :user_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':user_id', $user_id);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, $author_name, $artist_name)
 {
     global $db;

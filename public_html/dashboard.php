@@ -9,6 +9,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+//give users privilege to edit their entries now that we confirm there is a user_id
+grantEntryAccess($user_id)
+
 $user_id = $_SESSION['user_id'];
 $error_msg = "";
 $success_msg = "";
