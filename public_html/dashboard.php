@@ -10,17 +10,42 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 //give users privilege to edit their entries now that we confirm there is a user_id
-grantEntryAccess($user_id)
+
 
 $user_id = $_SESSION['user_id'];
 $error_msg = "";
 $success_msg = "";
 
+grantEntryAccess($user_id);
+
 // 2. HANDLE FORM SUBMISSIONS
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    // --- ADD ENTRY ---
-    if (isset($_POST['action']) && $_POST['action'] == 'add') {
+    // --- ADD TAG TO ENTRY ---
+    if (isset($_POST['action']) && $_POST['action'] == 'add_tag') {
+        $entry_id = $_POST['entry_id'];
+        $tag_text = trim($_POST['tag_text']);
+    
+        if (empty($tag_text)) {
+            $error_msg = "Tag cannot be empty.";
+        } else {
+            // 1. Check if tag already exists in tag_map
+            $existing_tag = getTagByText($tag_text);
+    
+            if ($existing_tag) {
+                // Tag already exists → just create relationship
+                addTagRelationship($entry_id, $existing_tag['tag_id']);
+                $success_msg = "Tag already existed — linked successfully!";
+            } else {
+                // 2. Tag does not exist → add to tag_map
+                $new_tag_id = addTag($tag_text);  // MODIFY addTag to return tag_id
+                addTagRelationship($entry_id, $new_tag_id);
+                $success_msg = "New tag added & linked!";
+            }
+        }
+    }
+    // ADD ENTRY 
+    elseif (isset($_POST['action']) && $_POST['action'] == 'add') {
         $name = trim($_POST['comic_name']);
         $rating = $_POST['rating'];
         if ($rating === '') $rating = null;
@@ -35,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error_msg = "Comic name is required.";
         }
     }
+
     
     // --- DELETE ENTRY ---
     elseif (isset($_POST['action']) && $_POST['action'] == 'delete') {
@@ -46,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // 3. FETCH DATA (After handling forms, so we see the updates)
 $entries = getAllEntries($user_id);
+$all_tags = getAllTags();
 ?>
 
 <!DOCTYPE html>
@@ -67,6 +94,18 @@ $entries = getAllEntries($user_id);
         </div>
     </div>
 </nav>
+
+<div class="mb-3">
+    <label class="form-label">Tags</label>
+    <select name="tag_text[]" class="form-select" multiple>
+        <?php foreach ($all_tags as $t): ?>
+            <option value="<?php echo htmlspecialchars($t['tag_text']); ?>">
+                <?php echo htmlspecialchars($t['tag_text']); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple</small>
+</div>
 
 <div class="container">
     
@@ -149,6 +188,14 @@ $entries = getAllEntries($user_id);
                                         <td><span class="badge bg-secondary"><?php echo htmlspecialchars($entry['rating']); ?>/10</span></td>
                                         <td><?php echo htmlspecialchars($entry['curr_status']); ?></td>
                                         <td><small class="text-muted"><?php echo htmlspecialchars($entry['review']); ?></small></td>
+                                        <td>
+                                            <?php 
+                                                $tags = getTagsForEntry($entry['entry_id']);
+                                                foreach ($tags as $tag) {
+                                                    echo '<span class="badge bg-info text-dark me-1">'.$tag['tag_text'].'</span>';
+                                                }
+                                            ?>
+                                        </td>
                                         <td>
                                             <!-- DELETE BUTTON -->
                                             <form method="post" action="dashboard.php" style="display:inline;">

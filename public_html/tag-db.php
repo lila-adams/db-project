@@ -43,6 +43,36 @@ function addNewTagName($tag_text)
 
         if ($statement->rowCount() == 0)
             echo "Failed to add tag <br/>";
+        
+        
+        $tag_id = $db->lastInsertId();
+        return $tag_id;
+    }
+    catch (PDOException $e) 
+    {
+        echo "Failed to add new tag to system. Please ensure all fields are filled in.";
+    }
+    catch (Exception $e)
+    {
+       echo "Failed to add new tag to system. Please ensure all fields are filled in.";
+    }
+}
+function addNewTagRelationship($tag_id, $entry_id)
+{
+    global $db;
+
+    $query = "INSERT INTO tag (tag_id, entry_id) VALUES (:tag_id, :entry_id)";  
+    
+    try {
+        $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
+        $statement->bindValue(':tag_id', $tag_id);
+        $statement->bindValue(':entry_id', $entry_id);
+        $statement->execute();      // run 
+
+        $statement->closeCursor();
+
+        if ($statement->rowCount() == 0)
+            echo "Failed to add tag <br/>";
     }
     catch (PDOException $e) 
     {
@@ -126,6 +156,17 @@ function delete_tagMapping($tag_id) {
     $statement->execute();    
     
     $statement->closeCursor();
+}
+
+function getTagByText($tag_text) {
+    global $db;
+    $query = "SELECT tag_id FROM tag_map WHERE tag_text = :tag_text LIMIT 1";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':tag_text', $tag_text);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    $statement->closeCursor();
+    return $result;
 }
 
 ?>

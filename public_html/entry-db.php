@@ -73,8 +73,9 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
     if ($comic_name !== "") {
         $query .= " AND comic_name LIKE :comic_name";
     }
-    if ($tag_text !== "") {
-        $query .= " AND tag_text = :tag_text";
+    if (!empty($tag_text)) {
+        $placeholders = implode(',', array_fill(0, count($tag_text), '?'));
+        $query .= " AND t.tag_text IN ($placeholders)";
     }
     if ($rating !== "") {
         $query .= " AND rating = :rating";
@@ -104,13 +105,15 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
     if ($curr_status !== "") {
         $statement->bindValue(':curr_status', $curr_status);
     }
-    if ($tag_id !== "") {
-        $statement->bindValue(':tag_text', $tag_text);
+    if (!empty($tag_text)) {
+        foreach ($tag_text as $i => $tag) {
+            $statement->bindValue($i+1, $tag);
+        }
     }
-    if ($author_id !== "") {
+    if ($author_name !== "") {
         $statement->bindValue(':author_name', $author_name);
     }
-    if ($artist_id !== "") {
+    if ($artist_name !== "") {
         $statement->bindValue(':artist_name', $artist_name);
     }
 
