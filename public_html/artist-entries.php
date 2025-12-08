@@ -36,9 +36,9 @@ if ($artist_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist - Comic Tracker</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
         .navbar { background: rgba(0,0,0,0.8) !important; }
         .page-container {
             background: white;
@@ -75,7 +75,7 @@ if ($artist_id) {
         .status-complete { background: #e8f5e9; color: #388e3c; }
     </style>
 </head>
-<body>
+<body class="dashboard-bg">
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">

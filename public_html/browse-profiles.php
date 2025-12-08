@@ -60,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Profiles - Comic Tracker</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem 0; }
         .navbar { background: rgba(0,0,0,0.8) !important; }
         .container-card {
             background: white;
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-<body>
+<body class="dashboard-bg">
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="row">
         <!-- User List -->
         <div class="col-md-4">
-            <div class="container-card">
+            <div class="container-card text-dark">
                 <h3 class="section-title">👥 Browse Users</h3>
                 <?php foreach ($all_users as $user): ?>
                     <div class="user-list-card">

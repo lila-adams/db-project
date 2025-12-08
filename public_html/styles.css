@@ -1,0 +1,76 @@
+body {
+    font-family: "Marvel", Arial, sans-serif;
+    background-image: url('images/dbbg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.container { color: white; }
+
+.login-card {
+    max-width: 400px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-bg {
+    background-image: url('images/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.card-bg {
+    background-color: rgba(129, 94, 82, 0.37);
+}
+
+@font-face {
+    font-family: "Marvel";
+    src: url("fonts/Marvel-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Marvel";
+    src: url("fonts/Marvel-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Marvel";
+    src: url("fonts/Marvel-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+.btn, .navbar, .card {
+    font-family: "Marvel", Arial, sans-serif;
+}
+body, h1, h2, h3, h4, h5, h6, p, span, div {
+    font-family: "Marvel", Arial, sans-serif;
+}
+
+/* Modal matches login card */
+.modal-content.login-card {
+    background-color: rgb(64, 50, 45);
+    color: white;
+    padding: 20px;
+}
+
+/* White text inside modal */
+.modal-content.login-card .form-label,
+.modal-content.login-card .modal-title {
+    color: white;
+}
+
+/* White close button for dark background */
+.btn-close-white {
+    filter: invert(1);
+}
+
