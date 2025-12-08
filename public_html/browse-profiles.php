@@ -175,12 +175,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h5 class="section-title">📖 Reading Goals</h5>
                         <?php if (!empty($goals)): ?>
                             <?php foreach ($goals as $goal): ?>
-                                <div class="goal-item">
+                                <div class="goal-item text-dark">
                                     <?php echo htmlspecialchars($goal['text']); ?>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="text-muted">No reading goals shared.</p>
+                            <p class="text-muted ">No reading goals shared.</p>
                         <?php endif; ?>
                     </div>
 
@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h5 class="section-title">💡 Recommendations</h5>
                         <?php if (!empty($recs)): ?>
                             <?php foreach ($recs as $rec): ?>
-                                <div class="rec-item">
+                                <div class="rec-item text-dark">
                                     <strong><?php echo htmlspecialchars($rec['comic_name']); ?></strong>
                                 </div>
                             <?php endforeach; ?>
