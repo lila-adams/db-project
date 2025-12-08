@@ -27,6 +27,29 @@ function addAuthor($name)
     }
 }
 
+function getAuthorByName($name)
+{
+    global $db;
+    $query = "SELECT * FROM Author WHERE name = :name LIMIT 1";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':name', $name);
+    $statement->execute();
+    $result = $statement->fetch();
+    $statement->closeCursor();
+    return $result;
+}
+
+// delete any written_by rows for an entry
+function deleteWrittenByByEntry($entry_id)
+{
+    global $db;
+    $query = "DELETE FROM written_by WHERE entry_id = :entry_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':entry_id', $entry_id);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 
 function addAuthorToEntry($entry_id, $author_id, $year)
 {
@@ -75,24 +98,39 @@ function getAuthorByEntry($entry_id, $user_id)
     return $results;
 }
 
+// Public variant: returns author information for an entry regardless of owner
+function getAuthorByEntryPublic($entry_id)
+{
+    global $db;
+    $query = "SELECT Author.* FROM Author
+    JOIN written_by ON Author.author_id = written_by.author_id
+    WHERE written_by.entry_id = :entry_id LIMIT 1";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':entry_id', $entry_id);
+    $statement->execute();
+    $results = $statement->fetch();
+    $statement->closeCursor();
+
+    return $results;
+}
+
 
 
 # get ALL entries by Author
 function getEntriesByAuthor($author_id, $user_id)
 {
     global $db;
-    $query = "SELECT * FROM Entry 
-    JOIN written_by ON Author.author_id = written_by.author_id
-    LEFT JOIN Entry on written_by.entry_id = Entry.entry_id
-    WHERE Author.author_id = :author_id
+    $query = "SELECT Entry.* FROM Entry
+    JOIN written_by ON written_by.entry_id = Entry.entry_id
+    WHERE written_by.author_id = :author_id
     AND Entry.user_id = :user_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':author_id', $author_id);
     $statement->bindValue(':user_id', $user_id);
     $statement->execute();
-    $results = $statement->fetch();   // fetch()
+    $results = $statement->fetchAll();
     $statement->closeCursor();
-   
+
     return $results;
 }
 

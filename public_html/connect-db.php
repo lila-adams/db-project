@@ -9,13 +9,16 @@
 // $dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
 
 //LOCAL instructions
-$username = 'comic_app';                  //  Cloud SQL username
-$password = 'ComicDBAUTH1505$';                    //  Cloud SQL password
+$username = 'nemo';                  //  Cloud SQL username
+$password = 'Nemo2468&';                    //  Cloud SQL password
 $host = '127.0.0.1';                 // LOCALHOST through Cloud SQL Proxy
 $port = 3306;                        // proxy port
 $dbname = 'comic-proj-db';           // your database name
 
 $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+
+// Toggle to true to show debug connection messages in the browser
+$DEBUG = false;
 
 //     e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=comic-proj-db";
 
@@ -59,8 +62,11 @@ try
    $db = new PDO($dsn, $username, $password);
 
    
-   // dispaly a message to let us know that we are connected to the database 
-   echo "<p>You are connected to the database -- host=$host</p>";
+      // display a message to let us know that we are connected to the database
+      // wrapped in a debug flag so it doesn't appear in normal use
+      if ($DEBUG) {
+         echo "<p>You are connected to the database -- host=$host</p>";
+      }
 }
 catch (PDOException $e)     // handle a PDO exception (errors thrown by the PDO library)
 {

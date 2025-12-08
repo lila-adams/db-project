@@ -102,6 +102,16 @@ function delete_tag($entry_id, $tag_id) {
     $statement->closeCursor();
 }
 
+// delete all tag associations for an entry
+function deleteAllTagsForEntry($entry_id) {
+    global $db;
+    $query = "DELETE FROM tag WHERE entry_id = :entry_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':entry_id', $entry_id);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 
 function delete_tagMapping($tag_id) {
     global $db;
