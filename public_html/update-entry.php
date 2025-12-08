@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label>Status</label>
                     <select name="status" class="form-select">
                         <option value="new" <?php if($entry['curr_status'] == 'new') echo 'selected'; ?>>New</option>
-                        <option value="reading" <?php if($entry['curr_status'] == 'reading') echo 'selected'; ?>>Reading</option>
+                        <option value="in progress" <?php if($entry['curr_status'] == 'in progress') echo 'selected'; ?>>In Progress</option>
                         <option value="complete" <?php if($entry['curr_status'] == 'complete') echo 'selected'; ?>>Complete</option>
                     </select>
                 </div>

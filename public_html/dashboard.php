@@ -250,7 +250,7 @@ $all_tags = getAllTagMappings($user_id);
                                         <th>Status</th>
                                         <th>Review</th>
                                         <th>Tags</th>
-                                    </tr>
+                                        <th>Add Tag</th> <th>Actions</th> </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($entries as $entry): ?>
@@ -259,6 +259,7 @@ $all_tags = getAllTagMappings($user_id);
                                         <td><span class="badge bg-secondary"><?php echo htmlspecialchars($entry['rating']); ?>/10</span></td>
                                         <td><?php echo htmlspecialchars($entry['curr_status']); ?></td>
                                         <td><small class="text-muted"><?php echo htmlspecialchars($entry['review']); ?></small></td>
+                                        
                                         <td>
                                             <?php 
                                                 $tags = getAllTags($entry['entry_id']);
@@ -267,47 +268,29 @@ $all_tags = getAllTagMappings($user_id);
                                                 }
                                             ?>
                                         </td>
+
                                         <td>
                                             <form method="post" action="dashboard.php">
                                                 <input type="hidden" name="action" value="add_tag">
                                                 <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
                                                 
-                                                <input list="tag-options" name="tag_text" placeholder="Add or select tag" class="form-control form-control-sm">
-                                                
+                                                <input list="tag-options" name="tag_text" placeholder="Add tag" class="form-control form-control-sm" style="width: 100px; display:inline-block;">
                                                 <datalist id="tag-options">
                                                     <?php foreach ($all_tags as $t): ?>
                                                         <option value="<?= htmlspecialchars($t['tag_text']) ?>"></option>
                                                     <?php endforeach; ?>
                                                 </datalist>
-
-                                                <button type="submit" class="btn btn-success btn-sm mt-1">Add Tag</button>
+                                                <button type="submit" class="btn btn-success btn-sm">+</button>
                                             </form>
                                         </td>
-                                        <td>
-                                            <form method="post" action="dashboard.php">
-                                                <input type="hidden" name="action" value="add_tag">
-                                                <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
-                                                
-                                                <input list="tag-options" name="tag_text" placeholder="Add or select tag" class="form-control form-control-sm">
-                                                
-                                                <datalist id="tag-options">
-                                                    <?php foreach ($all_tags as $t): ?>
-                                                        <option value="<?= htmlspecialchars($t['tag_text']) ?>"></option>
-                                                    <?php endforeach; ?>
-                                                </datalist>
 
-                                                <button type="submit" class="btn btn-success btn-sm mt-1">Add Tag</button>
-                                            </form>
-                                        </td>
                                         <td>
-                                            <!-- EDIT BUTTON LINKS TO update_entry.php -->
-                                            <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-warning btn-sm me-1">Edit</a>
+                                            <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             
-                                            <!-- DELETE BUTTON -->
                                             <form method="post" action="dashboard.php" style="display:inline;">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">X</button>
                                             </form>
                                         </td>
                                     </tr>
