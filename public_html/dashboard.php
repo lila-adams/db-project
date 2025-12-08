@@ -102,6 +102,8 @@ $all_tags = getAllTagMappings($user_id);
     <div class="container">
         <a class="navbar-brand" href="dashboard.php">Comic Tracker</a>
         <div class="d-flex align-items-center">
+            <!-- LINK TO PROFILE -->
+            <a href="profile.php" class="btn btn-light btn-sm me-3">My Profile</a>
             <span class="text-light me-3">User ID: <?php echo $user_id; ?></span>
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
@@ -282,6 +284,25 @@ $all_tags = getAllTagMappings($user_id);
                                             </form>
                                         </td>
                                         <td>
+                                            <form method="post" action="dashboard.php">
+                                                <input type="hidden" name="action" value="add_tag">
+                                                <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                                
+                                                <input list="tag-options" name="tag_text" placeholder="Add or select tag" class="form-control form-control-sm">
+                                                
+                                                <datalist id="tag-options">
+                                                    <?php foreach ($all_tags as $t): ?>
+                                                        <option value="<?= htmlspecialchars($t['tag_text']) ?>"></option>
+                                                    <?php endforeach; ?>
+                                                </datalist>
+
+                                                <button type="submit" class="btn btn-success btn-sm mt-1">Add Tag</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <!-- EDIT BUTTON LINKS TO update_entry.php -->
+                                            <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-warning btn-sm me-1">Edit</a>
+                                            
                                             <!-- DELETE BUTTON -->
                                             <form method="post" action="dashboard.php" style="display:inline;">
                                                 <input type="hidden" name="action" value="delete">
