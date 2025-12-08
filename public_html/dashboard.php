@@ -88,6 +88,8 @@ $entries = getAllEntries($user_id);
     <div class="container">
         <a class="navbar-brand" href="dashboard.php">Comic Tracker</a>
         <div class="d-flex align-items-center">
+            <!-- LINK TO PROFILE -->
+            <a href="profile.php" class="btn btn-light btn-sm me-3">My Profile</a>
             <span class="text-light me-3">User ID: <?php echo $user_id; ?></span>
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
@@ -196,6 +198,9 @@ $entries = getAllEntries($user_id);
                                             ?>
                                         </td>
                                         <td>
+                                            <!-- EDIT BUTTON LINKS TO update_entry.php -->
+                                            <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-warning btn-sm me-1">Edit</a>
+                                            
                                             <!-- DELETE BUTTON -->
                                             <form method="post" action="dashboard.php" style="display:inline;">
                                                 <input type="hidden" name="action" value="delete">
