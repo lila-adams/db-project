@@ -66,37 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <form action="signup.php" method="post">
 
-                <!-- Username -->
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input 
-                        type="text" 
-                        name="username" 
-                        class="form-control"
-                        value="<?php echo htmlspecialchars($form['username'] ?? ''); ?>"
-                        required>
-                </div>
+                <form action="signup.php" method="post">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required autofocus>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
 
-                <!-- Email -->
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        class="form-control"
-                        value="<?php echo htmlspecialchars($form['email'] ?? ''); ?>"
-                        required>
-                </div>
-
-                <!-- Password -->
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        class="form-control"
-                        required>
-                </div>
+            <label class="form-label">Confirm Password</label>
+            <input type="password" name="confirm_password" class="form-control" required>
+        </div>
 
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-success btn-lg rounded-0">
