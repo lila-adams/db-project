@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             font-size: 0.85rem;
         }
         .section-title {
-            color: #667eea;
+            color: #000000ff;
             font-weight: 700;
             margin-top: 1.5rem;
             margin-bottom: 1rem;
@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <textarea name="comment_text" class="form-control" rows="3" placeholder="Add a comment..." required></textarea>
             </div>
             <div>
-                <button class="btn btn-primary" type="submit">Post Comment</button>
+                <button class="btn btn-success" type="submit">Post Comment</button>
             </div>
         </form>
 
