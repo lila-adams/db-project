@@ -3,6 +3,7 @@ session_start();
 require("connect-db.php");
 require("goal-db.php");
 require("rec-db.php");
+require("entry-db.php");
 
 // 1. Force Login
 if (!isset($_SESSION['user_id'])) {
@@ -47,25 +48,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // 3. Fetch Data
 $goals = getAllGoals($user_id);
 $recs = getAllRecommendations($user_id);
+$my_entries = getAllEntries($user_id);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - Comic Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem 0; }
+        .navbar { background: rgba(0,0,0,0.8) !important; }
+        .card-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-header {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .item-box {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+        .delete-form {
+            display: inline;
+        }
+        .input-group-custom input {
+            border-radius: 8px 0 0 8px;
+        }
+        .input-group-custom button {
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
 </head>
-<body style="background-color: #f8f9fa;">
+<body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="dashboard.php">Comic Tracker</a>
-        <div>
-            <a href="dashboard.php" class="btn btn-outline-light me-2">Entries</a>
-            <a href="profile.php" class="btn btn-light me-2">Profile & Goals</a>
-            <a href="logout.php" class="btn btn-outline-danger">Logout</a>
+        <a class="navbar-brand fw-bold" href="dashboard.php">📚 Comic Tracker</a>
+        <div class="d-flex gap-2">
+            <a href="dashboard.php" class="btn btn-outline-light btn-sm">Dashboard</a>
+            <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">Browse Profiles</a>
+            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
     </div>
 </nav>
@@ -79,74 +116,100 @@ $recs = getAllRecommendations($user_id);
         </div>
     <?php endif; ?>
 
-    <div class="row">
-        <!-- LEFT COLUMN: GOALS -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">My Reading Goals</h5>
-                </div>
-                <div class="card-body">
-                    <!-- Add Goal Form -->
-                    <form method="post" class="mb-4 input-group">
-                        <input type="hidden" name="action" value="add_goal">
-                        <input type="text" name="goal_text" class="form-control" placeholder="e.g. Read 50 comics..." required>
-                        <button type="submit" class="btn btn-success">Add</button>
-                    </form>
+    <div class="row g-4">
+        <!-- GOALS SECTION -->
+        <div class="col-md-6">
+            <div class="card-container">
+                <h4 class="section-header">📖 My Reading Goals</h4>
+                
+                <!-- Add Goal Form -->
+                <form method="post" class="input-group input-group-custom mb-4">
+                    <input type="hidden" name="action" value="add_goal">
+                    <input type="text" name="goal_text" class="form-control" placeholder="Add a new goal..." required>
+                    <button class="btn btn-success" type="submit">Add</button>
+                </form>
 
-                    <!-- List Goals -->
-                    <ul class="list-group">
-                        <?php foreach ($goals as $goal): ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <?php echo htmlspecialchars($goal['text']); ?>
-                                <form method="post" style="display:inline;">
+                <!-- List Goals -->
+                <?php if (!empty($goals)): ?>
+                    <?php foreach ($goals as $goal): ?>
+                        <div class="item-box">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><?php echo htmlspecialchars($goal['text']); ?></span>
+                                <form method="post" class="delete-form" onsubmit="return confirm('Delete this goal?');">
                                     <input type="hidden" name="action" value="delete_goal">
                                     <input type="hidden" name="goal_id" value="<?php echo $goal['goal_id']; ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0">&times;</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
                                 </form>
-                            </li>
-                        <?php endforeach; ?>
-                        <?php if (empty($goals)) echo '<li class="list-group-item text-muted">No goals set yet.</li>'; ?>
-                    </ul>
-                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted">No goals yet. Set one to stay motivated!</p>
+                <?php endif; ?>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: RECOMMENDATIONS -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">My Recommendations</h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted small">Keep a list of comics you want to recommend to others (or yourself!).</p>
-                    
-                    <!-- Add Rec Form -->
-                    <form method="post" class="mb-4 input-group">
-                        <input type="hidden" name="action" value="add_rec">
-                        <input type="text" name="comic_name" class="form-control" placeholder="Comic Name..." required>
-                        <button type="submit" class="btn btn-info text-white">Add</button>
-                    </form>
+        <!-- RECOMMENDATIONS SECTION -->
+        <div class="col-md-6">
+            <div class="card-container">
+                <h4 class="section-header">💡 My Recommendations</h4>
+                <p class="text-muted small mb-3">Keep track of comics you want to recommend to others!</p>
+                
+                <!-- Add Rec Form -->
+                <form method="post" class="input-group input-group-custom mb-4">
+                    <input type="hidden" name="action" value="add_rec">
+                    <input type="text" name="comic_name" class="form-control" placeholder="Add a recommendation..." required>
+                    <button class="btn btn-info text-dark" type="submit">Add</button>
+                </form>
 
-                    <!-- List Recs -->
-                    <ul class="list-group">
-                        <?php foreach ($recs as $rec): ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <?php echo htmlspecialchars($rec['comic_name']); ?>
-                                <form method="post" style="display:inline;">
+                <!-- List Recs -->
+                <?php if (!empty($recs)): ?>
+                    <?php foreach ($recs as $rec): ?>
+                        <div class="item-box">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong><?php echo htmlspecialchars($rec['comic_name']); ?></strong>
+                                <form method="post" class="delete-form" onsubmit="return confirm('Delete this recommendation?');">
                                     <input type="hidden" name="action" value="delete_rec">
                                     <input type="hidden" name="rec_id" value="<?php echo $rec['rec_id']; ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0">&times;</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
                                 </form>
-                            </li>
-                        <?php endforeach; ?>
-                        <?php if (empty($recs)) echo '<li class="list-group-item text-muted">No recommendations yet.</li>'; ?>
-                    </ul>
-                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted">No recommendations yet. Add one!</p>
+                <?php endif; ?>
+
             </div>
         </div>
-    </div>
-</div>
+
+        <!-- MY COMICS SECTION -->
+        <div class="col-12">
+            <div class="card-container">
+                <h4 class="section-header">📚 My Comics (<?php echo count($my_entries); ?>)</h4>
+                <?php if (!empty($my_entries)): ?>
+                    <?php foreach ($my_entries as $entry): ?>
+                        <div class="item-box d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong><?php echo htmlspecialchars($entry['comic_name']); ?></strong>
+                                <div class="small text-muted">Status: <?php echo htmlspecialchars($entry['curr_status']); ?> • Rating: <?php echo $entry['rating'] ?: '—'; ?></div>
+                                <div class="mt-2 text-muted small"><?php echo htmlspecialchars($entry['review']); ?></div>
+                            </div>
+                            <div class="text-end">
+                                <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-warning mb-2">✏️</a>
+                                <form method="post" style="display:inline;" action="dashboard.php">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this entry?')">🗑️</button>
+                                </form>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted">You haven't added any comics yet.</p>
+                <?php endif; ?>
+            </div>
+        </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

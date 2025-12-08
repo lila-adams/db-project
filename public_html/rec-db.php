@@ -31,7 +31,7 @@ function getAllRecommendations($user_id)
 {
     global $db;
 
-    $query = "SELECT * FROM Recommendations WHERE user_id = :user_id";
+    $query = "SELECT * FROM Recommendation WHERE user_id = :user_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':user_id', $user_id);
     $statement->execute();
@@ -59,7 +59,7 @@ function getRecByID($rec_id)
 function delete_rec($rec_id) {
     global $db;
 
-    $query = "DELETE FROM tag WHERE rec_id=:rec_id";
+    $query = "DELETE FROM Recommendation WHERE rec_id=:rec_id";
 
     $statement = $db->prepare($query);
     $statement->bindValue(':rec_id', $rec_id);
