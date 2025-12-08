@@ -27,10 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($tag_text)) {
             $error_msg = "Tag cannot be empty.";
         } else {
-            // 1. Check if tag already exists in tag_map
-            $existing_tag = getTagByText($tag_text);
+            // see if tag already exists in tag_map
+            $existing_tag = getTagByText($tag_text, $user_id);
     
             if ($existing_tag) {
+<<<<<<< HEAD
+                // tag already exists → just create relationship
+                addNewTagRelationship($existing_tag['tag_id'], $entry_id);
+                $success_msg = "Tag already existed — linked successfully!  test";
+            } else {
+                // tag does not exist, so add to tag_map
+                $new_tag_id = addNewTagName($tag_text); 
+                addNewTagRelationship($new_tag_id, $entry_id);
+                $success_msg = "New tag added & linked! test2";
+=======
                 addNewTagRelationship($entry_id, $existing_tag['tag_id']);
                 $success_msg = "Tag linked successfully!";
             } else {
@@ -38,8 +48,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $new_tag_id = addNewTagName($tag_text);
                 addNewTagRelationship($entry_id, $new_tag_id);
                 $success_msg = "New tag added!";
+>>>>>>> 94eabe6b0c2f6e93825517349298f3367ec5a946
             }
         }
+    }
+    elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'search') {
+        $entries = searchEntries(
+            $user_id,
+            $_POST['comic_name'] ?? "",
+            $_POST['rating'] ?? "",
+            $_POST['status'] ?? "",
+            $_POST['tag_text'] ?? [],
+            $_POST['author_name'] ?? "",
+            $_POST['artist_name'] ?? ""
+        );
     }
     // ADD ENTRY 
     elseif (isset($_POST['action']) && $_POST['action'] == 'add') {
@@ -95,10 +117,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+<<<<<<< HEAD
+// 3. FETCH DATA (After handling forms, so we see the updates)
+if (!isset($_POST['action']) || $_POST['action'] != 'search') {
+    $entries = getAllEntries($user_id);
+}
+$all_tags = getAllTagMappings($user_id);
+=======
 // 3. FETCH DATA
 $library = getLibraryEntries();
 // fetch all tag mappings for dropdown filter
 $all_tags = getAllTagMappings();
+>>>>>>> 94eabe6b0c2f6e93825517349298f3367ec5a946
 ?>
 
 <!DOCTYPE html>
@@ -178,7 +208,13 @@ $all_tags = getAllTagMappings();
     </div>
 </nav>
 
+<<<<<<< HEAD
+
+
+<div class="container">
+=======
 <div class="container-main">
+>>>>>>> 94eabe6b0c2f6e93825517349298f3367ec5a946
     
     <?php if ($error_msg): ?>
         <div class="alert alert-danger"><?php echo $error_msg; ?></div>
@@ -191,7 +227,77 @@ $all_tags = getAllTagMappings();
         </div>
     <?php endif; ?>
 
+<<<<<<< HEAD
+    <div class="row">
+
+    <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-secondary text-white">Search Comics</div>
+    <div class="card-body">
+        <form method="post" action="dashboard.php" class="row g-3">
+            
+            <!-- comic Name -->
+            <div class="col-md-4">
+                <input type="text" name="comic_name" class="form-control" placeholder="Comic Name" 
+                       value="<?= isset($_POST['comic_name']) ? htmlspecialchars($_POST['comic_name']) : '' ?>">
+            </div>
+
+            <!-- tags, multi select-->
+            <div class="col-md-4">
+                <select name="tag_text[]" class="form-select" multiple>
+                    <?php foreach ($all_tags as $t): ?>
+                        <option value="<?= htmlspecialchars($t['tag_text']) ?>"
+                            <?php 
+                                if (isset($_POST['tag_text']) && in_array($t['tag_text'], $_POST['tag_text'])) echo 'selected'; 
+                            ?>>
+                            <?= htmlspecialchars($t['tag_text']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <small class="text-muted">Hold Ctrl (Windows) / Cmd (Mac) to select multiple</small>
+            </div>
+
+            <!-- rating -->
+            <div class="col-md-2">
+                <input type="number" name="rating" class="form-control" min="0" max="10" placeholder="Rating" 
+                       value="<?= isset($_POST['rating']) ? htmlspecialchars($_POST['rating']) : '' ?>">
+            </div>
+
+            <!-- status -->
+            <div class="col-md-2">
+                <select name="curr_status" class="form-select">
+                    <option value="">Any Status</option>
+                    <option value="new" <?= (isset($_POST['curr_status']) && $_POST['curr_status']=='new') ? 'selected' : '' ?>>New</option>
+                    <option value="in progress" <?= (isset($_POST['curr_status']) && $_POST['curr_status']=='in progress') ? 'selected' : '' ?>>In Progress</option>
+                    <option value="complete" <?= (isset($_POST['curr_status']) && $_POST['curr_status']=='complete') ? 'selected' : '' ?>>Complete</option>
+                </select>
+            </div>
+
+            <!-- author -->
+            <div class="col-md-3">
+                <input type="text" name="author_name" class="form-control" placeholder="Author"
+                       value="<?= isset($_POST['author_name']) ? htmlspecialchars($_POST['author_name']) : '' ?>">
+            </div>
+
+            <!-- artist -->
+            <div class="col-md-3">
+                <input type="text" name="artist_name" class="form-control" placeholder="Artist"
+                       value="<?= isset($_POST['artist_name']) ? htmlspecialchars($_POST['artist_name']) : '' ?>">
+            </div>
+
+            <!-- buttons -->
+            <div class="col-md-2">
+                <button type="submit" name="action" value="search" class="btn btn-primary w-100">Search</button>
+            </div>
+            <div class="col-md-2">
+                <a href="dashboard.php" class="btn btn-secondary w-100">Reset</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+=======
     <div class="row g-4">
+>>>>>>> 94eabe6b0c2f6e93825517349298f3367ec5a946
         
         <!-- LEFT COLUMN: ADD ENTRY FORM -->
         <div class="col-lg-4">
@@ -271,6 +377,83 @@ $all_tags = getAllTagMappings();
                         <a href="dashboard.php" class="btn btn-sm btn-outline-secondary ms-2">Clear</a>
                     </form>
                 </div>
+<<<<<<< HEAD
+                <div class="card-body p-0">
+                    <?php if (count($entries) > 0): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Rating</th>
+                                        <th>Status</th>
+                                        <th>Review</th>
+                                        <th>Tags</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($entries as $entry): ?>
+                                    <tr>
+                                        <td><strong><?php echo htmlspecialchars($entry['comic_name']); ?></strong></td>
+                                        <td><span class="badge bg-secondary"><?php echo htmlspecialchars($entry['rating']); ?>/10</span></td>
+                                        <td><?php echo htmlspecialchars($entry['curr_status']); ?></td>
+                                        <td><small class="text-muted"><?php echo htmlspecialchars($entry['review']); ?></small></td>
+                                        <td>
+                                            <?php 
+                                                $tags = getAllTags($entry['entry_id']);
+                                                foreach ($tags as $tag) {
+                                                    echo '<span class="badge bg-info text-dark me-1">'.$tag['tag_text'].'</span>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="dashboard.php">
+                                                <input type="hidden" name="action" value="add_tag">
+                                                <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                                
+                                                <input list="tag-options" name="tag_text" placeholder="Add or select tag" class="form-control form-control-sm">
+                                                
+                                                <datalist id="tag-options">
+                                                    <?php foreach ($all_tags as $t): ?>
+                                                        <option value="<?= htmlspecialchars($t['tag_text']) ?>"></option>
+                                                    <?php endforeach; ?>
+                                                </datalist>
+
+                                                <button type="submit" class="btn btn-success btn-sm mt-1">Add Tag</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="dashboard.php">
+                                                <input type="hidden" name="action" value="add_tag">
+                                                <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                                
+                                                <input list="tag-options" name="tag_text" placeholder="Add or select tag" class="form-control form-control-sm">
+                                                
+                                                <datalist id="tag-options">
+                                                    <?php foreach ($all_tags as $t): ?>
+                                                        <option value="<?= htmlspecialchars($t['tag_text']) ?>"></option>
+                                                    <?php endforeach; ?>
+                                                </datalist>
+
+                                                <button type="submit" class="btn btn-success btn-sm mt-1">Add Tag</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <!-- EDIT BUTTON LINKS TO update_entry.php -->
+                                            <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-warning btn-sm me-1">Edit</a>
+                                            
+                                            <!-- DELETE BUTTON -->
+                                            <form method="post" action="dashboard.php" style="display:inline;">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+=======
 
                 <?php
                     // if a search/filter is active, call searchLibrary
@@ -335,6 +518,7 @@ $all_tags = getAllTagMappings();
                                     <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation();">View</a>
                                 <?php endif; ?>
                             </div>
+>>>>>>> 94eabe6b0c2f6e93825517349298f3367ec5a946
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
