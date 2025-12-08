@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($entry['comic_name']); ?> - Comic Tracker</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
         .navbar { background: rgba(0,0,0,0.8) !important; }
         .entry-card {
             background: white;
@@ -103,8 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         .info-value { color: #333; }
     </style>
 </head>
-<body>
-
+<body class="dashboard-bg">
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">
     <div class="container">
@@ -121,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <!-- Header -->
         <div class="row mb-4">
             <div class="col-md-8">
-                <h1 class="mb-3"><?php echo htmlspecialchars($entry['comic_name']); ?></h1>
+                <h1 class="mb-3 text-dark"><?php echo htmlspecialchars($entry['comic_name']); ?></h1>
                 <div class="mb-3">
                     <span class="status-badge status-<?php echo $entry['curr_status']; ?>">
                         <?php echo ucfirst($entry['curr_status']); ?>
@@ -185,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 <!-- Comments Section -->
 <div class="container mb-5">
-    <div class="entry-card">
+    <div class="entry-card text-dark">
         <h5 class="section-title">Comments</h5>
 
         <!-- Add Comment Form -->

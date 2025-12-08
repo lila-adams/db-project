@@ -118,11 +118,10 @@ $all_tags = getAllTagMappings();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Comic Tracker</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
         .navbar { background: rgba(0,0,0,0.8) !important; backdrop-filter: blur(10px); }
-        .container-main { max-width: 1200px; }
         .add-entry-card {
             background: white;
             border-radius: 12px;
@@ -136,6 +135,8 @@ $all_tags = getAllTagMappings();
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             padding: 2rem;
             margin-bottom: 2rem;
+            margin-left: 3rem;
+            margin-right: 3rem;
         }
         .entry-item {
             border: 1px solid #e0e0e0;
@@ -175,39 +176,52 @@ $all_tags = getAllTagMappings();
         }
     </style>
 </head>
-<body>
+<body class="dashboard-bg">
+
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-dark mb-4">
-    <div class="container-main">
-        <a class="navbar-brand fw-bold" href="dashboard.php">📚 Comic Tracker</a>
-        <div class="d-flex gap-2 align-items-center">
+<nav class="navbar mb-4">
+    <div class="container">
+
+        <!-- ADD BUTTON (from second navbar) -->
+        <button type="button" class="btn btn-success rounded-3 me-3" 
+                data-bs-toggle="modal" data-bs-target="#myModal">
+            +
+        </button>
+
+        <!-- BRAND -->
+        <a class="navbar-brand link-light fw-bold" href="dashboard.php">
+            Comic Tracker
+        </a>
+
+        <!-- RIGHT SIDE BUTTONS -->
+        <div class="d-flex align-items-center gap-2">
+
+            <!-- FROM FIRST NAVBAR -->
             <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">👥 Browse Profiles</a>
+
+            <!-- PROFILE BUTTON (styled like second navbar) -->
             <a href="profile.php" class="btn btn-light btn-sm">My Profile</a>
+
+            <!-- LOGOUT -->
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
+
     </div>
 </nav>
 
-<div class="container-main">
-    
-    <?php if ($error_msg): ?>
-        <div class="alert alert-danger"><?php echo $error_msg; ?></div>
-    <?php endif; ?>
-    
-    <?php if ($success_msg): ?>
-        <div class="alert alert-success alert-dismissible fade show">
-            <?php echo $success_msg; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    <?php endif; ?>
+<div class="modal fade" id="myModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="card-bg modal-content login-card rounded-0">
+    <div class="modal-content login-card card-bg rounded-0 border border-success">
 
-    <div class="row g-4">
-        
-        <!-- LEFT COLUMN: ADD ENTRY FORM -->
-        <div class="col-lg-4">
-            <div class="add-entry-card">
-                <h5 class="mb-4">➕ Add New Entry</h5>
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-success">Add New Entry</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class>
                 <form method="post" action="dashboard.php">
                     <input type="hidden" name="action" value="add">
                     
@@ -252,14 +266,33 @@ $all_tags = getAllTagMappings();
                     </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Add Comic</button>
+                        <button type="submit" class="btn btn-success">Add Comic</button>
                     </div>
                 </form>
             </div>
-        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
 
+<div class="container-main">
+    
+    <?php if ($error_msg): ?>
+        <div class="alert alert-danger"><?php echo $error_msg; ?></div>
+    <?php endif; ?>
+    
+    <?php if ($success_msg): ?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <?php echo $success_msg; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+
+<div class="row g-4 justify-content-center">        
+        
         <!-- RIGHT COLUMN: ENTRIES LIST -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="entries-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="mb-0">📚 Library (<?php echo count($library); ?>)</h5>
@@ -343,7 +376,7 @@ $all_tags = getAllTagMappings();
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation(); return confirm('Delete this entry?')">🗑️ Delete</button>
                                     </form>
                                 <?php else: ?>
-                                    <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation();">View</a>
+                                    <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-outline-success" onclick="event.stopPropagation();">View</a>
                                 <?php endif; ?>
                             </div>
                         </div>
