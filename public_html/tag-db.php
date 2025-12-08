@@ -49,30 +49,15 @@ function addNewTagRelationship($tag_id, $entry_id)
     }
     catch (PDOException $e) 
     {
-        echo "Failed to add new tag to system. Please ensure all fields are filled in.";
+        echo "Failed to add new tag to system. Please ensure all fields are filled in. " .$e->getMessage();
     }
+
     catch (Exception $e)
     {
-       echo "Failed to add new tag to system. Please ensure all fields are filled in.";
+       echo "Failed to add new tag to system. Please ensure all fields are filled in." .$e->getMessage();
     }
 }
 
-function getTagInfoByID($tag_id)  
-{
-    global $db;
-
-    $query = "SELECT * FROM tag WHERE tag_id = :tag_id 
-    LEFT JOIN tag_map ON tag.tag_id = tag_map.tag_id";
-
-    $statement = $db->prepare($query);
-    $statement->bindValue(':tag_id', $tag_id);
-    $statement->execute();
-    $results = $statement->fetch();   // fetch()
-    $statement->closeCursor();
-   
-    return $results;
-
-}
 
 // get all tags for an entry
 function getAllTags($entry_id)
@@ -93,7 +78,7 @@ function getAllTagMappings()
 {
     global $db;
 
-    $query = "SELECT * FROM tag_map";
+    $query = "SELECT tag_text FROM tag_map ORDER BY tag_text";
     $statement = $db->prepare($query);
     $statement->execute();
     $results = $statement->fetchAll();   // fetch()

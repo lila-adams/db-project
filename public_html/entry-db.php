@@ -71,23 +71,26 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
         WHERE user_id = :user_id";
 
     if ($comic_name !== "") {
-        $query .= " AND comic_name LIKE :comic_name";
+        $query .= " AND e.comic_name LIKE :comic_name";
     }
     if (!empty($tag_text)) {
-        $placeholders = implode(',', array_fill(0, count($tag_text), '?'));
-        $query .= " AND t.tag_text IN ($placeholders)";
+        $tag_placeholders = [];
+        foreach ($tag_text as $i => $tag) {
+            $tag_placeholders[] = ":tag$i";
+        }
+        $query .= " AND tag_map.tag_text IN (" . implode(",", $tag_placeholders) . ")";
     }
     if ($rating !== "") {
-        $query .= " AND rating = :rating";
+        $query .= " AND e.rating = :rating";
     }
     if ($curr_status !== "") {
-        $query .= " AND curr_status = :curr_status";
+        $query .= " AND e.curr_status = :curr_status";
     }
     if ($author_name !== "") {
-        $query .= " AND author_name LIKE :author_name";
+        $query .= " AND Author.author_name LIKE :author_name";
     }
     if ($artist_name !== "") {
-        $query .= " AND artist_name LIKE :artist_name";
+        $query .= " AND Artist.artist_name LIKE :artist_name";
     }
     
 
@@ -107,7 +110,7 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
     }
     if (!empty($tag_text)) {
         foreach ($tag_text as $i => $tag) {
-            $statement->bindValue($i+1, $tag);
+            $statement->bindValue(":tag$i", $tag);
         }
     }
     if ($author_name !== "") {
