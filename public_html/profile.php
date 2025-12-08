@@ -161,7 +161,7 @@ $my_entries = getAllEntries($user_id);
                 <form method="post" class="input-group input-group-custom mb-4">
                     <input type="hidden" name="action" value="add_rec">
                     <input type="text" name="comic_name" class="form-control" placeholder="Add a recommendation..." required>
-                    <button class="btn btn-info text-dark" type="submit">Add</button>
+                    <button class="btn btn-success text-dark" type="submit">Add</button>
                 </form>
 
                 <!-- List Recs -->
@@ -191,7 +191,7 @@ $my_entries = getAllEntries($user_id);
                 <h4 class="section-header">📚 My Comics (<?php echo count($my_entries); ?>)</h4>
                 <?php if (!empty($my_entries)): ?>
                     <?php foreach ($my_entries as $entry): ?>
-                        <div class="item-box d-flex justify-content-between align-items-start">
+                        <div class="item-box d-flex justify-content-between align-items-start text-dark">
                             <div>
                                 <strong><?php echo htmlspecialchars($entry['comic_name']); ?></strong>
                                 <div class="small text-muted">Status: <?php echo htmlspecialchars($entry['curr_status']); ?> • Rating: <?php echo $entry['rating'] ?: '—'; ?></div>
