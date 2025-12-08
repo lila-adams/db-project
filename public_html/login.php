@@ -78,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 2rem;
             width: 100%;
             max-width: 400px;
+            align-items:center;
+            justify-content:center;
         }
         .login-header {
             text-align: center;
