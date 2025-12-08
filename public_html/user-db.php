@@ -59,7 +59,7 @@ function getUserInfo($user_id)
 
     $query = "SELECT * FROM User WHERE user_id =:user_id;";
     $statement = $db->prepare($query);
-    $statement->bindValue(':user_id', $goal_id);
+    $statement->bindValue(':user_id', $user_id);
     $statement->execute();
     $results = $statement->fetch();   // fetch()
     $statement->closeCursor();

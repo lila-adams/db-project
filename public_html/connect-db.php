@@ -9,8 +9,8 @@
 // $dsn = "mysql:host=136.107.47.230;dbname=comic-proj-db";
 
 //LOCAL instructions
-$username = 'comic_app';                  //  Cloud SQL username
-$password = 'ComicDBAUTH1505$';                    //  Cloud SQL password
+$username = 'nemo';                  //  Cloud SQL username
+$password = 'Nemo2468&';                    //  Cloud SQL password
 $host = '127.0.0.1';                 // LOCALHOST through Cloud SQL Proxy
 $port = 3306;                        // proxy port
 $dbname = 'comic-proj-db';           // your database name

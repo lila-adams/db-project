@@ -14,10 +14,13 @@ function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
         $statement->bindValue(':review', $review);
         $statement->execute();      // run 
 
+        $newId = $db->lastInsertId();
         $statement->closeCursor();
 
-        if ($statement->rowCount() == 0)
-            echo "Failed to add entry <br/>";
+        if ($newId)
+            return $newId;
+        else
+            return false;
     }
     
     catch (PDOException $e) 
@@ -130,15 +133,13 @@ function searchEntries($user_id, $comic_name, $rating, $curr_status, $tag_text, 
 function getYearWritten($entry_id)
 {
     global $db;
-    $query = "SELECT year FROM Entry
-    JOIN written_by.entry_id = Entry.entry_id
-    WHERE Entry.entry_id = :entry_id";
+    $query = "SELECT year FROM written_by WHERE entry_id = :entry_id LIMIT 1";
     $statement = $db->prepare($query);
     $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();
-    $results = $statement->fetch();   // fetch()
+    $results = $statement->fetch();
     $statement->closeCursor();
-   
+
     return $results;
 }
 
@@ -160,18 +161,83 @@ function findFavoriteEntries($user_id) {
 function getEntryById($entry_id)  
 {
     global $db;
-
-    $query = "SELECT * FROM Entry WHERE entry_id = :entry_id 
-    LEFT JOIN tag ON tag.tag_id = Entry.tag_id
-    LEFT JOIN tag_map ON tag.tag_id = tag_map.tag_id";
+    $query = "SELECT * FROM Entry WHERE entry_id = :entry_id LIMIT 1";
     $statement = $db->prepare($query);
     $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();
-    $results = $statement->fetch();   // fetch()
+    $results = $statement->fetch();
     $statement->closeCursor();
-   
+
     return $results;
 
+}
+
+// get all entries across all users (library view)
+function getLibraryEntries()
+{
+    global $db;
+    $query = "SELECT Entry.*, User.username FROM Entry JOIN User ON Entry.user_id = User.user_id ORDER BY Entry.entry_id DESC";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+// Search the global library with optional filters (returns Entry.* plus username)
+function searchLibrary($comic_name = '', $rating = '', $curr_status = '', $tag_text = '', $author_name = '', $artist_name = '')
+{
+    global $db;
+
+    $query = "SELECT DISTINCT Entry.*, User.username
+        FROM Entry
+        JOIN User ON Entry.user_id = User.user_id
+        LEFT JOIN written_by wb ON Entry.entry_id = wb.entry_id
+        LEFT JOIN Author ON wb.author_id = Author.author_id
+        LEFT JOIN drawn_by db ON Entry.entry_id = db.entry_id
+        LEFT JOIN Artist ON db.artist_id = Artist.artist_id
+        LEFT JOIN tag t ON t.entry_id = Entry.entry_id
+        LEFT JOIN tag_map tm ON t.tag_id = tm.tag_id
+        WHERE 1=1";
+
+    $params = [];
+
+    if ($comic_name !== '') {
+        $query .= " AND Entry.comic_name LIKE :comic_name";
+        $params[':comic_name'] = "%$comic_name%";
+    }
+    if ($rating !== '') {
+        $query .= " AND Entry.rating = :rating";
+        $params[':rating'] = $rating;
+    }
+    if ($curr_status !== '') {
+        $query .= " AND Entry.curr_status = :curr_status";
+        $params[':curr_status'] = $curr_status;
+    }
+    if ($tag_text !== '') {
+        $query .= " AND tm.tag_text LIKE :tag_text";
+        $params[':tag_text'] = "%$tag_text%";
+    }
+    if ($author_name !== '') {
+        $query .= " AND Author.name LIKE :author_name";
+        $params[':author_name'] = "%$author_name%";
+    }
+    if ($artist_name !== '') {
+        $query .= " AND Artist.name LIKE :artist_name";
+        $params[':artist_name'] = "%$artist_name%";
+    }
+
+    $query .= " ORDER BY Entry.entry_id DESC";
+
+    $statement = $db->prepare($query);
+    foreach ($params as $k => $v) {
+        $statement->bindValue($k, $v);
+    }
+
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
 }
 
 
@@ -184,9 +250,10 @@ function updateEntry($entry_id, $comic_name, $rating, $user_id, $curr_status, $r
     
     $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
     $statement->bindValue(':comic_name', $comic_name);
-    $statement->bindValue(':rating', $rating);
+    $statement->bindValue(':rating', $rating, $rating === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
     $statement->bindValue(':curr_status', $curr_status);
     $statement->bindValue(':review', $review);
+    $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();      // run
 
     $statement->closeCursor();
@@ -198,13 +265,18 @@ function deleteEntry($entry_id)
 {
     global $db;
 
-    $query = "DELETE FROM Entry WHERE entry_id=:entry_id;
-    DELETE FROM tag WHERE tag.entry_id =:entry_id";
-    $statement = $db->prepare($query);
-    $statement->bindValue(':entry_id', $entry_id);
-    $statement->execute();    
-    
-    $statement->closeCursor();
+    // Delete tag relationships first, then entry
+    $query1 = "DELETE FROM tag WHERE entry_id = :entry_id";
+    $stmt1 = $db->prepare($query1);
+    $stmt1->bindValue(':entry_id', $entry_id);
+    $stmt1->execute();
+    $stmt1->closeCursor();
+
+    $query2 = "DELETE FROM Entry WHERE entry_id = :entry_id";
+    $stmt2 = $db->prepare($query2);
+    $stmt2->bindValue(':entry_id', $entry_id);
+    $stmt2->execute();
+    $stmt2->closeCursor();
 }
 
 ?>
