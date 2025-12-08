@@ -278,7 +278,7 @@ $all_tags = getAllTagMappings();
                             <option value="complete" <?php if(($_GET['status'] ?? '') == 'complete') echo 'selected'; ?>>Complete</option>
                         </select>
                         <input type="number" name="rating" min="0" max="10" class="form-control form-control-sm me-2" style="width:80px;" placeholder="Rating" value="<?php echo htmlspecialchars($_GET['rating'] ?? ''); ?>">
-                        <button class="btn btn-sm btn-outline-light" type="submit">Filter</button>
+                        <button class="btn btn-sm btn-outline-dark" type="submit">Filter</button>
                         <a href="dashboard.php" class="btn btn-sm btn-outline-secondary ms-2">Clear</a>
                     </form>
                 </div>
