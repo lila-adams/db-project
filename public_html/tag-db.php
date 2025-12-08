@@ -1,31 +1,4 @@
 <?php
-# add link btwn entry and tag
-function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
-{
-    global $db;
-
-    $query = "INSERT INTO tag (entry_id, tag_id) VALUES (:entry_id, :tag_id)";  
-    
-    try {
-        $statement = $db->prepare($query);    // compile, leave fill-in-the-blank
-        $statement->bindValue(':entry_id', $entry_id);
-        $statement->bindValue(':tag_id', $tag_id);
-        $statement->execute();      // run 
-
-        $statement->closeCursor();
-
-        if ($statement->rowCount() == 0)
-            echo "Failed to add tag <br/>";
-    }
-    catch (PDOException $e) 
-    {
-        echo "Failed to add tag to this entry. Please ensure all fields are filled in.";
-    }
-    catch (Exception $e)
-    {
-       echo "Failed to add tag to this entry. Please ensure all fields are filled in.";
-    }
-}
 
 # add to tag_mapping IF tag not already in mapping
 function addNewTagName($tag_text)
@@ -106,8 +79,7 @@ function getAllTags($entry_id)
 {
     global $db;
 
-    $query = "SELECT * FROM tag WHERE entry_id = :entry_id
-    JOIN tag_map on tag_map.tag_id = tag.tag_id";
+    $query = "SELECT * FROM tag JOIN tag_map on tag_map.tag_id = tag.tag_id WHERE entry_id = :entry_id";
     $statement = $db->prepare($query);
     $statement->bindValue(':entry_id', $entry_id);
     $statement->execute();

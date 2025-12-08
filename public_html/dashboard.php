@@ -2,6 +2,8 @@
 session_start();
 require("connect-db.php");
 require("entry-db.php");
+require("tag-db.php");
+
 
 // 1. SECURITY: Force login
 if (!isset($_SESSION['user_id'])) {
@@ -15,8 +17,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $error_msg = "";
 $success_msg = "";
-
-grantEntryAccess($user_id);
 
 // 2. HANDLE FORM SUBMISSIONS
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -72,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // 3. FETCH DATA (After handling forms, so we see the updates)
 $entries = getAllEntries($user_id);
-$all_tags = getAllTags();
 ?>
 
 <!DOCTYPE html>
@@ -178,7 +177,7 @@ $all_tags = getAllTags();
                                         <th>Rating</th>
                                         <th>Status</th>
                                         <th>Review</th>
-                                        <th>Action</th>
+                                        <th>Tags</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -190,7 +189,7 @@ $all_tags = getAllTags();
                                         <td><small class="text-muted"><?php echo htmlspecialchars($entry['review']); ?></small></td>
                                         <td>
                                             <?php 
-                                                $tags = getTagsForEntry($entry['entry_id']);
+                                                $tags = getAllTags($entry['entry_id']);
                                                 foreach ($tags as $tag) {
                                                     echo '<span class="badge bg-info text-dark me-1">'.$tag['tag_text'].'</span>';
                                                 }
