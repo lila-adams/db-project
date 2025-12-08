@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($tag_text)) {
             $error_msg = "Tag cannot be empty.";
         } else {
-            // 1. Check if tag already exists in tag_map
-            $existing_tag = getTagByText($tag_text);
+            // see if tag already exists in tag_map
+            $existing_tag = getTagByText($tag_text, $user_id);
     
             if ($existing_tag) {
                 addNewTagRelationship($entry_id, $existing_tag['tag_id']);
@@ -40,6 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $success_msg = "New tag added!";
             }
         }
+    }
+    elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'search') {
+        $entries = searchEntries(
+            $user_id,
+            $_POST['comic_name'] ?? "",
+            $_POST['rating'] ?? "",
+            $_POST['status'] ?? "",
+            $_POST['tag_text'] ?? [],
+            $_POST['author_name'] ?? "",
+            $_POST['artist_name'] ?? ""
+        );
     }
     // ADD ENTRY 
     elseif (isset($_POST['action']) && $_POST['action'] == 'add') {
