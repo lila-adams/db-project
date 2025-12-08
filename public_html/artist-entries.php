@@ -71,7 +71,7 @@ if ($artist_id) {
             font-size: 0.7rem;
         }
         .status-new { background: #e3f2fd; color: #1976d2; }
-        .status-reading { background: #fff3e0; color: #f57c00; }
+        .status-reading, .status-in-progress { background: #fff3e0; color: #f57c00; }
         .status-complete { background: #e8f5e9; color: #388e3c; }
     </style>
 </head>
@@ -110,9 +110,10 @@ if ($artist_id) {
                             <?php if ($entry['rating']): ?>
                                 <div class="mb-2"><strong>⭐ <?php echo $entry['rating']; ?>/10</strong></div>
                             <?php endif; ?>
-                            <span class="status-badge status-<?php echo $entry['curr_status']; ?>">
-                                <?php echo ucfirst($entry['curr_status']); ?>
-                            </span>
+                                        <?php $status_class = 'status-' . str_replace(' ', '-', $entry['curr_status']); ?>
+                                        <span class="status-badge <?php echo $status_class; ?>">
+                                            <?php echo ucfirst($entry['curr_status']); ?>
+                                        </span>
                         </div>
                     </div>
                 </div>

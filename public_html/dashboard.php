@@ -158,7 +158,7 @@ $all_tags = getAllTagMappings();
             font-size: 0.7rem;
         }
         .status-new { background: #e3f2fd; color: #1976d2; }
-        .status-reading { background: #fff3e0; color: #f57c00; }
+        .status-reading, .status-in-progress { background: #fff3e0; color: #f57c00; }
         .status-complete { background: #e8f5e9; color: #388e3c; }
         .rating { font-weight: bold; color: #667eea; font-size: 1.1rem; }
         .btn-link-custom { color: #667eea; text-decoration: none; font-weight: 600; }
@@ -202,7 +202,7 @@ $all_tags = getAllTagMappings();
         </div>
     <?php endif; ?>
 
-    <div class="row g-4">
+    <div class="row g-4 justify-content-center align-items-start">
         
         <!-- LEFT COLUMN: ADD ENTRY FORM -->
         <div class="col-lg-4">
@@ -225,7 +225,7 @@ $all_tags = getAllTagMappings();
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select">
                             <option value="new">🆕 New</option>
-                            <option value="reading">📖 Reading</option>
+                            <option value="in progress">📖 Reading</option>
                             <option value="complete">✅ Complete</option>
                         </select>
                     </div>
@@ -259,7 +259,7 @@ $all_tags = getAllTagMappings();
         </div>
 
         <!-- RIGHT COLUMN: ENTRIES LIST -->
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             <div class="entries-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="mb-0">📚 Library (<?php echo count($library); ?>)</h5>
@@ -274,7 +274,7 @@ $all_tags = getAllTagMappings();
                         <select name="status" class="form-select form-select-sm me-2">
                             <option value="">All</option>
                             <option value="new" <?php if(($_GET['status'] ?? '') == 'new') echo 'selected'; ?>>New</option>
-                            <option value="reading" <?php if(($_GET['status'] ?? '') == 'reading') echo 'selected'; ?>>Reading</option>
+                            <option value="in progress" <?php if(($_GET['status'] ?? '') == 'in progress') echo 'selected'; ?>>Reading</option>
                             <option value="complete" <?php if(($_GET['status'] ?? '') == 'complete') echo 'selected'; ?>>Complete</option>
                         </select>
                         <input type="number" name="rating" min="0" max="10" class="form-control form-control-sm me-2" style="width:80px;" placeholder="Rating" value="<?php echo htmlspecialchars($_GET['rating'] ?? ''); ?>">
@@ -328,7 +328,8 @@ $all_tags = getAllTagMappings();
                                     <?php endif; ?>
                                     <div class="mb-2">
                                         <div class="small text-muted">by <?php echo htmlspecialchars($entry['username']); ?></div>
-                                        <span class="status-badge status-<?php echo $entry['curr_status']; ?>">
+                                        <?php $status_class = 'status-' . str_replace(' ', '-', $entry['curr_status']); ?>
+                                        <span class="status-badge <?php echo $status_class; ?>">
                                             <?php echo ucfirst($entry['curr_status']); ?>
                                         </span>
                                     </div>

@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             font-size: 0.75rem;
         }
         .status-new { background: #e3f2fd; color: #1976d2; }
-        .status-reading { background: #fff3e0; color: #f57c00; }
+        .status-reading, .status-in-progress { background: #fff3e0; color: #f57c00; }
         .status-complete { background: #e8f5e9; color: #388e3c; }
         .tag-badge {
             display: inline-block;
@@ -123,9 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <div class="col-md-8">
                 <h1 class="mb-3"><?php echo htmlspecialchars($entry['comic_name']); ?></h1>
                 <div class="mb-3">
-                    <span class="status-badge status-<?php echo $entry['curr_status']; ?>">
-                        <?php echo ucfirst($entry['curr_status']); ?>
-                    </span>
+                                        <?php $status_class = 'status-' . str_replace(' ', '-', $entry['curr_status']); ?>
+                                        <span class="status-badge <?php echo $status_class; ?>">
+                                            <?php echo ucfirst($entry['curr_status']); ?>
+                                        </span>
                 </div>
             </div>
             <div class="col-md-4 text-end">

@@ -22,14 +22,16 @@ function addEntry($comic_name, $rating, $user_id, $curr_status, $review)
         else
             return false;
     }
-    
     catch (PDOException $e) 
     {
-        echo "Failed to add entry. Please ensure all fields are filled in.";
+        // Log the DB error for debugging and return false to the caller
+        error_log("addEntry PDOException: " . $e->getMessage());
+        return false;
     }
     catch (Exception $e)
     {
-       echo "Failed to add entry. Please ensure all fields are correctly filled in.";
+        error_log("addEntry Exception: " . $e->getMessage());
+        return false;
     }
 }
 
