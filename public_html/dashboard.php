@@ -130,15 +130,16 @@ $all_tags = getAllTagMappings();
             margin-bottom: 2rem;
         }
         .entries-card {
-            background: white;
+            background: rgba(249, 243, 237, 0.8);
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(188, 166, 120, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
             margin-left: 3rem;
             margin-right: 3rem;
         }
         .entry-item {
+            background: rgba(255, 255, 255, 1);
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 1.5rem;
@@ -183,27 +184,19 @@ $all_tags = getAllTagMappings();
 <nav class="navbar mb-4">
     <div class="container">
 
-        <!-- ADD BUTTON (from second navbar) -->
         <button type="button" class="btn btn-success rounded-3 me-3" 
                 data-bs-toggle="modal" data-bs-target="#myModal">
             +
         </button>
 
-        <!-- BRAND -->
         <a class="navbar-brand link-light fw-bold" href="dashboard.php">
             Comic Tracker
         </a>
 
-        <!-- RIGHT SIDE BUTTONS -->
         <div class="d-flex align-items-center gap-2">
 
-            <!-- FROM FIRST NAVBAR -->
             <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">👥 Browse Profiles</a>
-
-            <!-- PROFILE BUTTON (styled like second navbar) -->
             <a href="profile.php" class="btn btn-light btn-sm">My Profile</a>
-
-            <!-- LOGOUT -->
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
 
@@ -295,7 +288,7 @@ $all_tags = getAllTagMappings();
         <div class="col-lg-12">
             <div class="entries-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0">📚 Library (<?php echo count($library); ?>)</h5>
+                    <h5 class="mb-0"><?php echo count($library); ?> results found.</h5>
                     <form class="d-flex" method="get" action="dashboard.php" id="library-search-form">
                         <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Search comics, authors..." value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
                         <select name="tag" class="form-select form-select-sm me-2">
@@ -383,7 +376,7 @@ $all_tags = getAllTagMappings();
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <div class="alert alert-info">No comics yet. Add one to get started!</div>
+                    <div class="alert alert-success">No comics yet. Add one to get started!</div>
                 <?php endif; ?>
             </div>
         </div>

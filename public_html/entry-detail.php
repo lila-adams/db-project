@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         <!-- Authors Section -->
         <?php if ($authors): ?>
-        <div class="mb-4">
+        <div class="mb-4 text-dark">
             <h5 class="section-title">Author</h5>
             <p><?php echo htmlspecialchars($authors['name']); ?></p>
         </div>
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         <!-- Artists Section -->
         <?php if ($artists): ?>
-        <div class="mb-4">
+        <div class="mb-4 text-dark">
             <h5 class="section-title">Artist</h5>
             <p><?php echo htmlspecialchars($artists['name']); ?></p>
         </div>

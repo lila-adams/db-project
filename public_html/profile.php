@@ -121,7 +121,7 @@ $my_entries = getAllEntries($user_id);
     <div class="row g-4">
         <!-- GOALS SECTION -->
         <div class="col-md-6">
-            <div class="card-container">
+            <div class="card-container text-dark">
                 <h4 class="section-header">📖 My Reading Goals</h4>
                 
                 <!-- Add Goal Form -->
@@ -155,7 +155,6 @@ $my_entries = getAllEntries($user_id);
         <div class="col-md-6">
             <div class="card-container">
                 <h4 class="section-header">💡 My Recommendations</h4>
-                <p class="text-muted small mb-3">Keep track of comics you want to recommend to others!</p>
                 
                 <!-- Add Rec Form -->
                 <form method="post" class="input-group input-group-custom mb-4">
@@ -167,7 +166,7 @@ $my_entries = getAllEntries($user_id);
                 <!-- List Recs -->
                 <?php if (!empty($recs)): ?>
                     <?php foreach ($recs as $rec): ?>
-                        <div class="item-box">
+                        <div class="item-box text-dark">
                             <div class="d-flex justify-content-between align-items-center">
                                 <strong><?php echo htmlspecialchars($rec['comic_name']); ?></strong>
                                 <form method="post" class="delete-form" onsubmit="return confirm('Delete this recommendation?');">
