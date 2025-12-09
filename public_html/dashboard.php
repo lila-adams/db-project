@@ -130,17 +130,15 @@ $all_tags = getAllTagMappings();
             margin-bottom: 2rem;
         }
         .entries-card {
-            background: rgba(249, 243, 237, 0.8);
+            background: rgba(234, 222, 211, 0.7);
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(188, 166, 120, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
-            margin-left: 3rem;
-            margin-right: 3rem;
+            margin-left: 12rem;
+            margin-right: 12rem;
         }
         .entry-item {
             background: rgba(255, 255, 255, 1);
-            border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 1.5rem;
             margin-bottom: 1rem;
@@ -149,7 +147,6 @@ $all_tags = getAllTagMappings();
         .entry-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
         }
         .entry-item { cursor: pointer; }
         .status-badge {
@@ -162,12 +159,12 @@ $all_tags = getAllTagMappings();
         .status-new { background: #e3f2fd; color: #1976d2; }
         .status-reading, .status-in-progress { background: #fff3e0; color: #f57c00; }
         .status-complete { background: #e8f5e9; color: #388e3c; }
-        .rating { font-weight: bold; color: #667eea; font-size: 1.1rem; }
-        .btn-link-custom { color: #667eea; text-decoration: none; font-weight: 600; }
-        .btn-link-custom:hover { color: #764ba2; text-decoration: underline; }
+        .rating { font-weight: bold; color: #000000ff; font-size: 1.1rem; }
+        .btn-link-custom { color: #000000ff; text-decoration: none; font-weight: 600; }
+        .btn-link-custom:hover { color: #1aae00ff; text-decoration: underline; }
         .tag-badge {
             display: inline-block;
-            background: #667eea;
+            background: #799846ff;
             color: #fff;
             padding: 0.25rem 0.6rem;
             border-radius: 999px;
@@ -184,18 +181,23 @@ $all_tags = getAllTagMappings();
 <nav class="navbar mb-4">
     <div class="container">
 
-        <button type="button" class="btn btn-success rounded-3 me-3" 
-                data-bs-toggle="modal" data-bs-target="#myModal">
-            +
+        <button 
+            data-bs-toggle="modal" 
+            data-bs-target="#myModal"
+            style="background:none; border:none; padding:0; cursor:pointer;">
+            
+            <img src="images/add.png" 
+                alt="Add"
+                style="width:32px; height:32px;">
         </button>
 
         <a class="navbar-brand link-light fw-bold" href="dashboard.php">
-            Comic Tracker
+            WICKSY
         </a>
 
         <div class="d-flex align-items-center gap-2">
 
-            <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">👥 Browse Profiles</a>
+            <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">Browse Profiles</a>
             <a href="profile.php" class="btn btn-light btn-sm">My Profile</a>
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
@@ -205,7 +207,7 @@ $all_tags = getAllTagMappings();
 
 <div class="modal fade" id="myModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="card-bg modal-content login-card rounded-0">
+    <div class="card-bg modal-content login-card rounded-5">
     <div class="modal-content login-card card-bg rounded-0 border border-success">
 
       <div class="modal-header border-0">
@@ -231,15 +233,10 @@ $all_tags = getAllTagMappings();
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select">
-                            <option value="new">🆕 New</option>
-                            <option value="in progress">📖 Reading</option>
-                            <option value="complete">✅ Complete</option>
+                            <option value="new">New</option>
+                            <option value="in progress">Reading</option>
+                            <option value="complete">Complete</option>
                         </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Review</label>
-                        <textarea name="review" class="form-control" rows="2" placeholder="What did you think?"></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -257,9 +254,28 @@ $all_tags = getAllTagMappings();
                             <input type="number" name="artist_year" class="form-control" placeholder="Year (optional)" min="1000" max="9999">
                         </div>
                     </div>
+
+                                        
+                    <div class="mb-3">
+                        <label class="form-label">Review</label>
+                        <textarea name="review" class="form-control" rows="2" placeholder="What did you think?"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tags (comma-separated)</label>
+                        <?php
+                            $existing_tags = getAllTags($entry_id);
+                            $tags_str = '';
+                            if (!empty($existing_tags)) {
+                                $names = array_map(function($r){ return $r['tag_text']; }, $existing_tags);
+                                $tags_str = implode(', ', $names);
+                            }
+                        ?>
+                        <input type="text" name="tags" class="form-control" placeholder="tag1, tag2" value="<?php echo htmlspecialchars($tags_str); ?>">
+                    </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Add Comic</button>
+                        <button type="submit" class="btn btn-success rounded-0">Add Comic</button>
                     </div>
                 </form>
             </div>
@@ -284,13 +300,12 @@ $all_tags = getAllTagMappings();
 
 <div class="row g-4 justify-content-center">        
         
-        <!-- RIGHT COLUMN: ENTRIES LIST -->
         <div class="col-lg-12">
             <div class="entries-card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0"><?php echo count($library); ?> results found.</h5>
+                    <h5 class="mb-0"><?php echo count($library); ?> result(s) found.</h5>
                     <form class="d-flex" method="get" action="dashboard.php" id="library-search-form">
-                        <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Search comics, authors..." value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
+                        <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Search..." value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>">
                         <select name="tag" class="form-select form-select-sm me-2">
                             <option value="">All tags</option>
                             <?php foreach ($all_tags as $t): ?>
@@ -303,9 +318,9 @@ $all_tags = getAllTagMappings();
                             <option value="in progress" <?php if(($_GET['status'] ?? '') == 'in progress') echo 'selected'; ?>>Reading</option>
                             <option value="complete" <?php if(($_GET['status'] ?? '') == 'complete') echo 'selected'; ?>>Complete</option>
                         </select>
-                        <input type="number" name="rating" min="0" max="10" class="form-control form-control-sm me-2" style="width:80px;" placeholder="Rating" value="<?php echo htmlspecialchars($_GET['rating'] ?? ''); ?>">
-                        <button class="btn btn-sm btn-outline-dark" type="submit">Filter</button>
-                        <a href="dashboard.php" class="btn btn-sm btn-outline-secondary ms-2">Clear</a>
+                        <input type="number" name="rating" min="0" max="10" class="form-control form-control-sm me-2" style="width:80px;" placeholder="☆" value="<?php echo htmlspecialchars($_GET['rating'] ?? ''); ?>">
+                        <button class="btn btn-sm btn-dark" type="submit">Filter</button>
+                        <a href="dashboard.php" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
                     </form>
                 </div>
 
@@ -330,11 +345,34 @@ $all_tags = getAllTagMappings();
                                 <div class="entry-item" data-entry-id="<?php echo $entry['entry_id']; ?>" tabindex="0" role="link">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h6 class="mb-2">
-                                        <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn-link-custom">
+                                    <h6 class="mb-2 d-flex align-items-center">
+                                        <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn-link-custom me-2">
                                             <?php echo htmlspecialchars($entry['comic_name']); ?>
                                         </a>
+                                        
+                                        <?php if ($entry['user_id'] == $user_id): ?>
+                                        <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" 
+                                        onclick="event.stopPropagation();" 
+                                        class="me-2">
+                                            <img src="images/pencil.png" 
+                                                alt="Edit" 
+                                                style="width:16px; height:16px; cursor:pointer;">
+                                        </a>
+
+                                        <form method="post" style="display:inline;" 
+                                            onsubmit="event.stopPropagation(); return confirm('Delete this entry?')">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
+                                            <button type="submit" 
+                                                    style="background:none; border:none; padding:0; cursor:pointer;">
+                                                <img src="images/delete.png" 
+                                                    alt="Delete" 
+                                                    style="width:16px; height:16px;">
+                                            </button>
+                                        </form>
+                                        <?php endif; ?>
                                     </h6>
+
                                     <p class="text-muted small mb-2"><?php echo htmlspecialchars($entry['review']); ?></p>
                                     <?php
                                         // show tags for this entry
@@ -350,7 +388,7 @@ $all_tags = getAllTagMappings();
                                 </div>
                                 <div class="col-md-4 text-end">
                                     <?php if ($entry['rating']): ?>
-                                        <div class="rating mb-2">⭐ <?php echo $entry['rating']; ?></div>
+                                        <div class="rating mb-2">☆ <?php echo $entry['rating']; ?></div>
                                     <?php endif; ?>
                                     <div class="mb-2">
                                         <div class="small text-muted">by <?php echo htmlspecialchars($entry['username']); ?></div>
@@ -361,18 +399,7 @@ $all_tags = getAllTagMappings();
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-2">
-                                <?php if ($entry['user_id'] == $user_id): ?>
-                                    <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-warning me-2" onclick="event.stopPropagation();">✏️ Edit</a>
-                                    <form method="post" style="display:inline;" onsubmit="event.stopPropagation();">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="event.stopPropagation(); return confirm('Delete this entry?')">🗑️ Delete</button>
-                                    </form>
-                                <?php else: ?>
-                                    <a href="entry-detail.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-outline-success" onclick="event.stopPropagation();">View</a>
-                                <?php endif; ?>
-                            </div>
+                            
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>

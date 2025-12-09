@@ -71,7 +71,7 @@ $my_entries = getAllEntries($user_id);
             margin-bottom: 2rem;
         }
         .section-header {
-            color: #667eea;
+            color: #000000ff;
             font-weight: 700;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
@@ -79,7 +79,7 @@ $my_entries = getAllEntries($user_id);
         }
         .item-box {
             background: #f9f9f9;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #71a246ff;
             padding: 1rem;
             margin-bottom: 1rem;
             border-radius: 4px;
@@ -100,7 +100,7 @@ $my_entries = getAllEntries($user_id);
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="dashboard.php">📚 Comic Tracker</a>
+        <a class="navbar-brand fw-bold" href="dashboard.php">WICKSY</a>
         <div class="d-flex gap-2">
             <a href="dashboard.php" class="btn btn-outline-light btn-sm">Dashboard</a>
             <a href="browse-profiles.php" class="btn btn-outline-light btn-sm">Browse Profiles</a>
@@ -122,7 +122,7 @@ $my_entries = getAllEntries($user_id);
         <!-- GOALS SECTION -->
         <div class="col-md-6">
             <div class="card-container text-dark">
-                <h4 class="section-header">📖 My Reading Goals</h4>
+                <h4 class="section-header">My Goals</h4>
                 
                 <!-- Add Goal Form -->
                 <form method="post" class="input-group input-group-custom mb-4">
@@ -140,7 +140,9 @@ $my_entries = getAllEntries($user_id);
                                 <form method="post" class="delete-form" onsubmit="return confirm('Delete this goal?');">
                                     <input type="hidden" name="action" value="delete_goal">
                                     <input type="hidden" name="goal_id" value="<?php echo $goal['goal_id']; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" style="background:none; border:none; padding:0;">
+                                        <img src="images/delete.png" alt="Delete" style="width:16px; height:16px;">
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -154,13 +156,13 @@ $my_entries = getAllEntries($user_id);
         <!-- RECOMMENDATIONS SECTION -->
         <div class="col-md-6">
             <div class="card-container">
-                <h4 class="section-header">💡 My Recommendations</h4>
+                <h4 class="section-header">My Recommendations</h4>
                 
                 <!-- Add Rec Form -->
                 <form method="post" class="input-group input-group-custom mb-4">
                     <input type="hidden" name="action" value="add_rec">
                     <input type="text" name="comic_name" class="form-control" placeholder="Add a recommendation..." required>
-                    <button class="btn btn-success text-dark" type="submit">Add</button>
+                    <button class="btn btn-success text-light" type="submit">Add</button>
                 </form>
 
                 <!-- List Recs -->
@@ -172,7 +174,9 @@ $my_entries = getAllEntries($user_id);
                                 <form method="post" class="delete-form" onsubmit="return confirm('Delete this recommendation?');">
                                     <input type="hidden" name="action" value="delete_rec">
                                     <input type="hidden" name="rec_id" value="<?php echo $rec['rec_id']; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" style="background:none; border:none; padding:0;">
+                                        <img src="images/delete.png" alt="Delete" style="width:16px; height:16px;">
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -187,7 +191,7 @@ $my_entries = getAllEntries($user_id);
         <!-- MY COMICS SECTION -->
         <div class="col-12">
             <div class="card-container">
-                <h4 class="section-header">📚 My Comics (<?php echo count($my_entries); ?>)</h4>
+                <h4 class="section-header">My Shelf (<?php echo count($my_entries); ?>)</h4>
                 <?php if (!empty($my_entries)): ?>
                     <?php foreach ($my_entries as $entry): ?>
                         <div class="item-box d-flex justify-content-between align-items-start text-dark">
@@ -197,11 +201,17 @@ $my_entries = getAllEntries($user_id);
                                 <div class="mt-2 text-muted small"><?php echo htmlspecialchars($entry['review']); ?></div>
                             </div>
                             <div class="text-end">
-                                <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm btn-warning mb-2">✏️</a>
+                                <a href="update-entry.php?id=<?php echo $entry['entry_id']; ?>" class="btn btn-sm mb-2" style="background:none; border:none; padding:0;">
+                                    <img src="images/pencil.png" alt="Edit" style="width:16px; height:16px;">
+                                </a>
                                 <form method="post" style="display:inline;" action="dashboard.php">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="entry_id" value="<?php echo $entry['entry_id']; ?>">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this entry?')">🗑️</button>
+                                    <button type="submit" 
+                                            style="background:none; border:none; padding:0; cursor:pointer;" 
+                                            onclick="return confirm('Delete this entry?')">
+                                        <img src="images/delete.png" alt="Delete" style="width:16px; height:16px;">
+                                    </button>
                                 </form>
                             </div>
                         </div>

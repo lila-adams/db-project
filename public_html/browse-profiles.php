@@ -81,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .user-list-card:hover {
             background: #f5f5f5;
-            border-color: #667eea;
             transform: translateX(4px);
         }
         .user-list-card a {
@@ -90,20 +89,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
         }
         .section-title {
-            color: #667eea;
+            color: #000000ff;
             font-weight: 700;
             margin-top: 1.5rem;
             margin-bottom: 1rem;
         }
         .goal-item, .rec-item {
             background: #f9f9f9;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #71a246ff;
             padding: 0.75rem;
             margin-bottom: 0.5rem;
             border-radius: 4px;
         }
         .profile-header {
-            color: #667eea;
+            color: #000000ff;
             font-weight: 700;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
@@ -116,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="dashboard.php">📚 Comic Tracker</a>
+        <a class="navbar-brand" href="dashboard.php">WICKSY</a>
         <div class="d-flex gap-2">
             <a href="dashboard.php" class="btn btn-outline-light btn-sm">Dashboard</a>
             <?php if (isset($_SESSION['user_id'])): ?>
@@ -134,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- User List -->
         <div class="col-md-4">
             <div class="container-card text-dark">
-                <h3 class="section-title">👥 Browse Users</h3>
+                <h3 class="section-title">Browse Users</h3>
                 <?php foreach ($all_users as $user): ?>
                     <div class="user-list-card">
                         <a href="?user_id=<?php echo $user['user_id']; ?>">
@@ -151,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($selected_user): ?>
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="profile-header mb-0">
-                            📜 <?php echo htmlspecialchars($selected_user['username']); ?>'s Profile
+                            <?php echo htmlspecialchars($selected_user['username']); ?>'s Profile
                         </h2>
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $selected_user['user_id']): ?>
                             <div>
@@ -172,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Goals Section -->
                     <div class="mb-4">
-                        <h5 class="section-title">📖 Reading Goals</h5>
+                        <h5 class="section-title">Reading Goals</h5>
                         <?php if (!empty($goals)): ?>
                             <?php foreach ($goals as $goal): ?>
                                 <div class="goal-item text-dark">
@@ -186,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Recommendations Section -->
                     <div class="mb-4">
-                        <h5 class="section-title">💡 Recommendations</h5>
+                        <h5 class="section-title">Recommendations</h5>
                         <?php if (!empty($recs)): ?>
                             <?php foreach ($recs as $rec): ?>
                                 <div class="rec-item text-dark">
@@ -200,11 +199,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Comics Section -->
                     <div class="mb-4">
-                        <h5 class="section-title">📚 Comics</h5>
+                        <h5 class="section-title">Shelf</h5>
                         <?php if (!empty($user_entries)): ?>
                             <?php foreach ($user_entries as $ue): ?>
                                 <div class="goal-item">
-                                    <strong><a href="entry-detail.php?id=<?php echo $ue['entry_id']; ?>" class="btn-link-custom"><?php echo htmlspecialchars($ue['comic_name']); ?></a></strong>
+                                    <strong><a href="entry-detail.php?id=<?php echo $ue['entry_id']; ?>" class="btn-link-custom text-success"><?php echo htmlspecialchars($ue['comic_name']); ?></a></strong>
                                     <div class="small text-muted">Status: <?php echo htmlspecialchars($ue['curr_status']); ?> • Rating: <?php echo $ue['rating'] ?: '—'; ?></div>
                                 </div>
                             <?php endforeach; ?>

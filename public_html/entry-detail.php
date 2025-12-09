@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         .rating-display {
             font-size: 2rem;
             font-weight: bold;
-            color: #667eea;
+            color: #000000ff;
         }
         .status-badge {
             padding: 0.5rem 1rem;
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         .status-complete { background: #e8f5e9; color: #388e3c; }
         .tag-badge {
             display: inline-block;
-            background: #667eea;
+            background: #799846ff;
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="dashboard.php">📚 Comic Tracker</a>
+        <a class="navbar-brand" href="dashboard.php">WICKSY</a>
         <div class="d-flex gap-2">
             <a href="dashboard.php" class="btn btn-outline-light btn-sm">Back</a>
             <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </div>
             <div class="col-md-4 text-end">
                 <?php if ($entry['rating']): ?>
-                    <div class="rating-display">⭐ <?php echo $entry['rating']; ?>/10</div>
+                    <div class="rating-display">☆ <?php echo $entry['rating']; ?>/10</div>
                 <?php else: ?>
                     <div class="text-muted">Not rated</div>
                 <?php endif; ?>
